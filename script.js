@@ -20,7 +20,6 @@ async function init() {
 			const bounds = map.getBounds();
 			const bbox = getMapBbox(map);
 
-			// remove invisible markers
 			markers.forEach(marker => {
 				if (!bounds.contains(marker.getPosition())) {
 					marker.setMap(null);
@@ -64,7 +63,10 @@ function createWeatherMarkers(map, weatherData) {
 
 		return new google.maps.Marker({
 			map,
-			position: { lat: point.coord.Lat, lng: point.coord.Lon },
+			position: {
+				lat: point.coord.Lat,
+				lng: point.coord.Lon
+			},
 			title: `${point.name}, ${weather?.description || "N/A"}`,
 			icon: `http://openweathermap.org/img/wn/${weather?.icon}@2x.png`,
 			weatherData: point,
@@ -81,8 +83,10 @@ function getMapBbox(map) {
 	return [ne.lng(), sw.lat(), sw.lng(), ne.lat()];
 }
 
-async function getWeatherData({ apiKey = "", bbox }) {
-	
+async function getWeatherData({
+	apiKey = "",
+	bbox
+}) {
 	const response = await fetch(
 		`http://api.openweathermap.org/data/2.5/box/city?appid=${apiKey}&bbox=${bbox}`
 	);
@@ -96,6 +100,7 @@ async function getWeatherData({ apiKey = "", bbox }) {
 	alert(`Failed to fetch weather data.\nReason: ${data.message}`);
 	return [];
 }
+
 
 function getUserCoords() {
 	return new Promise((resolve, reject) => {
